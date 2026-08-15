@@ -175,7 +175,7 @@ void Cube::LPrime()
 	constexpr EdgePos	edge_cycle[4] = {EdgePos::BL, EdgePos::DL, EdgePos::FL, EdgePos::UL};
 	constexpr CornerPos corner_cycle[4] = {CornerPos::UBL, CornerPos::DBL, CornerPos::DFL, CornerPos::UFL};
 	constexpr uint8_t	edge_orient_cycle[4] = {0, 0, 0, 0};
-	constexpr uint8_t	corner_orient_cycle[4] = {1, 2, 1, 2};
+	constexpr uint8_t	corner_orient_cycle[4] = {2, 1, 2, 1};
 
 	applyEdgeCycle(edge_cycle, edge_orient_cycle);
 	applyCornerCycle(corner_cycle, corner_orient_cycle);
@@ -203,7 +203,7 @@ void Cube::RPrime()
 	constexpr EdgePos	edge_cycle[4] = {EdgePos::UR, EdgePos::FR, EdgePos::DR, EdgePos::BR};
 	constexpr CornerPos corner_cycle[4] = {CornerPos::UFR, CornerPos::DFR, CornerPos::DBR, CornerPos::UBR};
 	constexpr uint8_t	edge_orient_cycle[4] = {0, 0, 0, 0};
-	constexpr uint8_t	corner_orient_cycle[4] = {1, 2, 1, 2};
+	constexpr uint8_t	corner_orient_cycle[4] = {2, 1, 2, 1};
 
 	applyEdgeCycle(edge_cycle, edge_orient_cycle);
 	applyCornerCycle(corner_cycle, corner_orient_cycle);
@@ -231,7 +231,7 @@ void Cube::FPrime()
 	constexpr EdgePos	edge_cycle[4] = {EdgePos::UF, EdgePos::FL, EdgePos::DF, EdgePos::FR};
 	constexpr CornerPos corner_cycle[4] = {CornerPos::UFL, CornerPos::DFL, CornerPos::DFR, CornerPos::UFR};
 	constexpr uint8_t	edge_orient_cycle[4] = {1, 1, 1, 1};
-	constexpr uint8_t	corner_orient_cycle[4] = {1, 2, 1, 2};
+	constexpr uint8_t	corner_orient_cycle[4] = {2, 1, 2, 1};
 
 	applyEdgeCycle(edge_cycle, edge_orient_cycle);
 	applyCornerCycle(corner_cycle, corner_orient_cycle);
@@ -259,7 +259,7 @@ void Cube::BPrime()
 	constexpr EdgePos	edge_cycle[4] = {EdgePos::BR, EdgePos::DB, EdgePos::BL, EdgePos::UB};
 	constexpr CornerPos corner_cycle[4] = {CornerPos::UBR, CornerPos::DBR, CornerPos::DBL, CornerPos::UBL};
 	constexpr uint8_t	edge_orient_cycle[4] = {1, 1, 1, 1};
-	constexpr uint8_t	corner_orient_cycle[4] = {1, 2, 1, 2};
+	constexpr uint8_t	corner_orient_cycle[4] = {2, 1, 2, 1};
 
 	applyEdgeCycle(edge_cycle, edge_orient_cycle);
 	applyCornerCycle(corner_cycle, corner_orient_cycle);
