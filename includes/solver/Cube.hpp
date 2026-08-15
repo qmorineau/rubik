@@ -14,8 +14,9 @@ class Cube
 		Cube();
 		~Cube();
 
-		void move(std::string);
+		void move(Move m);
 		void reset();
+		void print() const;
 		// getters
 		const std::array<EdgeId, 12>	edgePerm() const {return _edge_perm;};
 		const std::array<CornerId, 8>	cornerPerm() const {return _corner_perm;};
@@ -27,7 +28,7 @@ class Cube
 		std::array<uint8_t, 12>		_edge_orient;
 		std::array<uint8_t, 8>		_corner_orient;
 
-		std::unordered_map<std::string, void (Cube::*)()>	_moves;
+		std::unordered_map<Move, void (Cube::*)()>	_moves;
 
 		void applyEdgeCycle(const EdgePos cycle[4], const uint8_t orientDelta[4]);
 		void applyCornerCycle(const CornerPos cycle[4], const uint8_t orientDelta[4]);

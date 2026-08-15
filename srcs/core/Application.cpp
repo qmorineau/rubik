@@ -4,10 +4,13 @@ Application::Application(int argc, char *argv[]) :
 	_window(this),
 	_scene(nullptr)
 {
-	auto str = _parser.parse(argc, argv);
+	auto moves = _parser.parse(argc, argv);
 	_scene = new Scene();
-	for (auto s : str)
-		_scene->cube().move(s);
+	for (auto m : moves)
+	{
+		_scene->cube().move(m);
+		_solver.move(m);
+	}
 }
 		
 

@@ -2,37 +2,61 @@
 
 Cube::Cube()
 {
-	_moves.emplace("U", &Cube::U);
-	_moves.emplace("U'", &Cube::UPrime);
-	_moves.emplace("U2", &Cube::U2);
-	_moves.emplace("D", &Cube::D);
-	_moves.emplace("D'", &Cube::DPrime);
-	_moves.emplace("D2", &Cube::D2);
-	_moves.emplace("F", &Cube::F);
-	_moves.emplace("F'", &Cube::FPrime);
-	_moves.emplace("F2", &Cube::F2);
-	_moves.emplace("B", &Cube::B);
-	_moves.emplace("B'", &Cube::BPrime);
-	_moves.emplace("B2", &Cube::B2);
-	_moves.emplace("L", &Cube::L);
-	_moves.emplace("L'", &Cube::LPrime);
-	_moves.emplace("L2", &Cube::L2);
-	_moves.emplace("R", &Cube::R);
-	_moves.emplace("R'", &Cube::RPrime);
-	_moves.emplace("R2", &Cube::R2);
+	_moves.emplace(Move::U, &Cube::U);
+	_moves.emplace(Move::UPrime, &Cube::UPrime);
+	_moves.emplace(Move::U2, &Cube::U2);
+	_moves.emplace(Move::D, &Cube::D);
+	_moves.emplace(Move::DPrime, &Cube::DPrime);
+	_moves.emplace(Move::D2, &Cube::D2);
+	_moves.emplace(Move::F, &Cube::F);
+	_moves.emplace(Move::FPrime, &Cube::FPrime);
+	_moves.emplace(Move::F2, &Cube::F2);
+	_moves.emplace(Move::B, &Cube::B);
+	_moves.emplace(Move::BPrime, &Cube::BPrime);
+	_moves.emplace(Move::B2, &Cube::B2);
+	_moves.emplace(Move::L, &Cube::L);
+	_moves.emplace(Move::LPrime, &Cube::LPrime);
+	_moves.emplace(Move::L2, &Cube::L2);
+	_moves.emplace(Move::R, &Cube::R);
+	_moves.emplace(Move::RPrime, &Cube::RPrime);
+	_moves.emplace(Move::R2, &Cube::R2);
 
 	reset();
 }
 
 Cube::~Cube() = default;
 
-void Cube::move(std::string move)
+void Cube::move(Move move)
 {
 	auto it = _moves.find(move);
     if (it == _moves.end())
-        throw std::runtime_error("Unknown Move: " + move);
-
+        throw std::runtime_error("Rubik: Cube::move(): Unmanage move");
     (this->*(it->second))();
+}
+
+void Cube::print() const
+{
+	// Edges
+	const char edges[][3] = {
+		"UF", "UR", "UB", "UL",
+		"DF", "DR", "DB", "DL",
+		"FL", "FR", "BL", "BR"
+	};
+	std::cout << "===== Edges =====" << std::endl;
+	for (auto i = 0; i < 12; i++)
+		std::cout << edges[i] << " == " << edges[toIndex(_edge_perm[i])]
+			<< ", o = " << static_cast<int>(_edge_orient[toIndex(static_cast<EdgePos>(i))]) << std::endl;
+
+	// Corners
+	const char corners[][4] = {
+		"UFL", "UFR", "UBR", "UBL",
+		"DFL", "DFR", "DBR", "DBL"
+	};
+	std::cout << "===== Corners =====" << std::endl;
+	for (auto i = 0; i < 8; i++)
+		std::cout << corners[i] << " == " << corners[toIndex(_corner_perm[i])]
+			<< ", o = " << static_cast<int>(_corner_orient[toIndex(static_cast<CornerPos>(i))]) << std::endl;
+	std::cout << std::endl;
 }
 
 void Cube::reset()
@@ -51,30 +75,32 @@ void Cube::reset()
 
 void Cube::applyEdgeCycle(const EdgePos cycle[4], const uint8_t orientDelta[4])
 {
-	EdgeId tmp = _edge_perm[toIndex(cycle[3])];
+	EdgeId	tmp = _edge_perm[toIndex(cycle[3])];
+	uint8_t	tmpOrient = _edge_orient[toIndex(cycle[3])];
 
 	for (int i = 3; i > 0; i--)
 	{
 		_edge_perm[toIndex(cycle[i])] = _edge_perm[toIndex(cycle[i - 1])];
-		_edge_orient[toIndex(cycle[i])] = (_edge_orient[toIndex(cycle[i])] + orientDelta[i]) % 2;
+		_edge_orient[toIndex(cycle[i])] = (_edge_orient[toIndex(cycle[i - 1])] + orientDelta[i]) % 2;
 	}
 
 	_edge_perm[toIndex(cycle[0])] = tmp;
-	_edge_orient[toIndex(cycle[0])] = (_edge_orient[toIndex(cycle[0])] + orientDelta[0]) % 2;
+	_edge_orient[toIndex(cycle[0])] = (tmpOrient + orientDelta[0]) % 2;
 }
 
 void Cube::applyCornerCycle(const CornerPos cycle[4], const uint8_t orientDelta[4])
 {
-	CornerId tmp = _corner_perm[toIndex(cycle[3])];
+	CornerId	tmp = _corner_perm[toIndex(cycle[3])];
+	uint8_t		tmpOrient = _corner_orient[toIndex(cycle[3])];
 
 	for (int i = 3; i > 0; i--)
 	{
 		_corner_perm[toIndex(cycle[i])] = _corner_perm[toIndex(cycle[i - 1])];
-		_corner_orient[toIndex(cycle[i])] = (_corner_orient[toIndex(cycle[i])] + orientDelta[i]) % 3;
+		_corner_orient[toIndex(cycle[i])] = (_corner_orient[toIndex(cycle[i - 1])] + orientDelta[i]) % 3;
 	}
 
 	_corner_perm[toIndex(cycle[0])] = tmp;
-	_corner_orient[toIndex(cycle[0])] = (_corner_orient[toIndex(cycle[0])] + orientDelta[0]) % 3;
+	_corner_orient[toIndex(cycle[0])] = (tmpOrient + orientDelta[0]) % 3;
 }
 
 void Cube::U()

@@ -16,6 +16,7 @@
 #include "Parser.hpp"
 #include "Window.hpp"
 #include "Scene.hpp"
+#include "Solver.hpp"
 
 class Application
 {
@@ -31,6 +32,7 @@ class Application
 		Camera&			getCamera() 		{return _scene->camera();};
 		Renderer&		renderer() 			{return _renderer;};
 		Scene*			scene() 			{return _scene;};
+		Solver&			solver() 			{return _solver;};
 		InputManager&	inputManager()		{return _inputManager;};
 		InputHandler&	inputHandler()		{return _inputHandler;};
 		InputContext&	inputContext()		{return _inputContext;};
@@ -43,6 +45,7 @@ class Application
 		InputContext		_inputContext;
 		Scene*				_scene;
 		Renderer			_renderer;
+		Solver				_solver;
 		float				_deltaTime = 0.0f;
 		float				_lastFrame = 0.0f;
 

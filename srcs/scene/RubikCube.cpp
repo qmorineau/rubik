@@ -2,7 +2,33 @@
 
 RubikCube::RubikCube() : _meshGPU(_mesh)
 {
+	_moves.emplace(Move::U, &RubikCube::U);
+	_moves.emplace(Move::UPrime, &RubikCube::UPrime);
+	_moves.emplace(Move::U2, &RubikCube::U2);
+	_moves.emplace(Move::D, &RubikCube::D);
+	_moves.emplace(Move::DPrime, &RubikCube::DPrime);
+	_moves.emplace(Move::D2, &RubikCube::D2);
+	_moves.emplace(Move::F, &RubikCube::F);
+	_moves.emplace(Move::FPrime, &RubikCube::FPrime);
+	_moves.emplace(Move::F2, &RubikCube::F2);
+	_moves.emplace(Move::B, &RubikCube::B);
+	_moves.emplace(Move::BPrime, &RubikCube::BPrime);
+	_moves.emplace(Move::B2, &RubikCube::B2);
+	_moves.emplace(Move::L, &RubikCube::L);
+	_moves.emplace(Move::LPrime, &RubikCube::LPrime);
+	_moves.emplace(Move::L2, &RubikCube::L2);
+	_moves.emplace(Move::R, &RubikCube::R);
+	_moves.emplace(Move::RPrime, &RubikCube::RPrime);
+	_moves.emplace(Move::R2, &RubikCube::R2);
+
 	_globalRot = mat4::rotateX(math::radians(-30)).mul_mat(mat4::rotateY(math::radians(30)));
+	reset();
+}
+
+RubikCube::~RubikCube()	= default;
+
+void RubikCube::reset()
+{
 	// pieces: Left->Right; row: Back->Front;
 	const vec3 translate[] = {
 		// Upper
@@ -23,29 +49,9 @@ RubikCube::RubikCube() : _meshGPU(_mesh)
 	{
 		_cubelets[i].translate_pos = translate[i];
 		_cubelets[i].translate = mat4::translate(translate[i]);
+		_cubelets[i].orient = mat4::identity();
 	}
-
-	_moves.emplace("U", &RubikCube::U);
-	_moves.emplace("U'", &RubikCube::UPrime);
-	_moves.emplace("U2", &RubikCube::U2);
-	_moves.emplace("D", &RubikCube::D);
-	_moves.emplace("D'", &RubikCube::DPrime);
-	_moves.emplace("D2", &RubikCube::D2);
-	_moves.emplace("F", &RubikCube::F);
-	_moves.emplace("F'", &RubikCube::FPrime);
-	_moves.emplace("F2", &RubikCube::F2);
-	_moves.emplace("B", &RubikCube::B);
-	_moves.emplace("B'", &RubikCube::BPrime);
-	_moves.emplace("B2", &RubikCube::B2);
-	_moves.emplace("L", &RubikCube::L);
-	_moves.emplace("L'", &RubikCube::LPrime);
-	_moves.emplace("L2", &RubikCube::L2);
-	_moves.emplace("R", &RubikCube::R);
-	_moves.emplace("R'", &RubikCube::RPrime);
-	_moves.emplace("R2", &RubikCube::R2);
 }
-
-RubikCube::~RubikCube()	= default;
 
 std::array<int, 4> RubikCube::getLayerIndices(Face f, bool is_edge) const
 {
@@ -96,12 +102,11 @@ int RubikCube::getCenterIdx(Face f) const
 	}
 }
 
-void RubikCube::move(std::string move)
+void RubikCube::move(Move move)
 {
 	auto it = _moves.find(move);
     if (it == _moves.end())
-        throw std::runtime_error("Unknown Move: " + move);
-
+        throw std::runtime_error("Rubik: RubikCube::move(): move not manage");
     (this->*(it->second))();
 }
 

@@ -5,7 +5,9 @@
 #include <string>
 #include <sstream>
 #include <stdexcept>
-#include <unordered_set>
+#include <unordered_map>
+
+#include "cube_types.hpp"
 
 class Parser
 {
@@ -13,7 +15,7 @@ class Parser
 		Parser();
 		~Parser();
 
-		std::vector<std::string> parse(int argc, char *argv[]);
+		std::vector<Move> parse(int argc, char *argv[]);
 };
 
 #endif

@@ -16,6 +16,8 @@ enum class Scancode
 	KEY_RIGHT,
 	KEY_UP,
 	KEY_DOWN,
+	KEY_ENTER,
+	KEY_SPACE,
 	COUNT,
 };
 

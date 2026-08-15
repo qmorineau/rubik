@@ -1,6 +1,8 @@
 #ifndef COMMANDS_HPP
 #define COMMANDS_HPP
 
+#include <cstdlib>
+
 #include "ICommand.hpp"
 #include "Application.hpp"
 
@@ -8,6 +10,9 @@ namespace Commands
 {
     // Window
     class CloseWindow : public ICommand {void execute(Application* app) const override;};
+	// Cube
+	class ResetCube : public ICommand {void execute(Application* app) const override;};
+	class ScrambleCube : public ICommand {void execute(Application* app) const override;};
 	// Move
 	class U : public ICommand {void execute(Application* app) const override;};
 	class UPrime : public ICommand {void execute(Application* app) const override;};

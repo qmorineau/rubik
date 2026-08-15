@@ -1,21 +1,35 @@
 #include "Parser.hpp"
 
+#include "cube_types.hpp"
+
 Parser::Parser() = default;
 Parser::~Parser() = default;
 
 
-const std::unordered_set<std::string> moves = {
-	"U", "U'", "U2",
-	"D", "D'", "D2",
-	"L", "L'", "L2",
-	"R", "R'", "R2",
-	"F", "F'", "F2",
-	"B", "B'", "B2"
+const std::unordered_map<std::string, Move> moves = {
+	{"U", Move::U},
+	{"U'", Move::UPrime},
+	{"U2", Move::U2},
+	{"D", Move::D},
+	{"D'", Move::DPrime},
+	{"D2", Move::D2},
+	{"L", Move::L},
+	{"L'", Move::LPrime},
+	{"L2", Move::L2},
+	{"R", Move::R},
+	{"R'", Move::RPrime},
+	{"R2", Move::R2},
+	{"F", Move::F},
+	{"F'", Move::FPrime},
+	{"F2", Move::F2},
+	{"B", Move::B},
+	{"B'", Move::BPrime},
+	{"B2", Move::B2},
 };
 
-std::vector<std::string> Parser::parse(int argc, char *argv[])
+std::vector<Move> Parser::parse(int argc, char *argv[])
 {
-	std::vector<std::string> list;
+	std::vector<Move> list;
 	if (argc > 2)
 		throw std::runtime_error("Rubik: too many arguments");
 	if (argc == 1)
@@ -25,9 +39,10 @@ std::vector<std::string> Parser::parse(int argc, char *argv[])
 	std::string token;
 	while (iss >> token)
 	{
-		if (moves.find(token) == moves.end())
+		auto it = moves.find(token);
+		if (it == moves.end())
 			throw std::runtime_error("Rubik: Unknown move : " + token);
-		list.push_back(token);
+		list.push_back(it->second);
 	}
 	return (list);
 }

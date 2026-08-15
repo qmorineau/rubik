@@ -66,7 +66,8 @@ enum class Move : uint8_t
 	L, LPrime, L2,
 	R, RPrime, R2,
 	F, FPrime, F2,
-	B, BPrime, B2
+	B, BPrime, B2,
+	COUNT
 };
 
 template <typename EnumT>

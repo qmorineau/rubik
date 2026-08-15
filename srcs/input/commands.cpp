@@ -1,25 +1,90 @@
 #include "commands.hpp"
 
 #include "Application.hpp"
+#include "cube_types.hpp"
 
 // Window
 void Commands::CloseWindow::execute(Application* app) const
 {
     app->window().closeWindow();
 };
+// Cube
+void Commands::ResetCube::execute(Application* app) const
+{
+	app->scene()->cube().reset();
+	app->solver().cube().reset();
+}
+void Commands::ScrambleCube::execute(Application* app) const
+{
+	for (auto i = 0; i < 50; i++)
+	{
+		int randomNum = rand() % static_cast<int>(Move::COUNT);
+		Move m = static_cast<Move>(randomNum);
+
+		app->scene()->cube().move(m);
+		app->solver().cube().move(m);
+	}
+}
 // Moves
-void Commands::U::execute(Application* app) const {app->scene()->cube().applyMove(Face::UP, 90);};
-void Commands::UPrime::execute(Application* app) const {app->scene()->cube().applyMove(Face::UP, -90);};
-void Commands::D::execute(Application* app) const {app->scene()->cube().applyMove(Face::DOWN, 90);};
-void Commands::DPrime::execute(Application* app) const {app->scene()->cube().applyMove(Face::DOWN, -90);};
-void Commands::L::execute(Application* app) const {app->scene()->cube().applyMove(Face::LEFT, 90);};
-void Commands::LPrime::execute(Application* app) const {app->scene()->cube().applyMove(Face::LEFT, -90);};
-void Commands::R::execute(Application* app) const {app->scene()->cube().applyMove(Face::RIGHT, 90);};
-void Commands::RPrime::execute(Application* app) const {app->scene()->cube().applyMove(Face::RIGHT, -90);};
-void Commands::F::execute(Application* app) const {app->scene()->cube().applyMove(Face::FRONT, 90);};
-void Commands::FPrime::execute(Application* app) const {app->scene()->cube().applyMove(Face::FRONT, -90);};
-void Commands::B::execute(Application* app) const {app->scene()->cube().applyMove(Face::BACK, 90);};
-void Commands::BPrime::execute(Application* app) const {app->scene()->cube().applyMove(Face::BACK, -90);};
+void Commands::U::execute(Application* app) const {
+	app->scene()->cube().U();
+	app->solver().move(Move::U);
+};
+void Commands::UPrime::execute(Application* app) const
+{
+	app->scene()->cube().UPrime();
+	app->solver().move(Move::UPrime);
+};
+void Commands::D::execute(Application* app) const 
+{
+	app->scene()->cube().D();
+	app->solver().move(Move::D);
+};
+void Commands::DPrime::execute(Application* app) const 
+{
+	app->scene()->cube().DPrime();
+	app->solver().move(Move::DPrime);
+};
+void Commands::L::execute(Application* app) const 
+{
+	app->scene()->cube().L();
+	app->solver().move(Move::L);
+};
+void Commands::LPrime::execute(Application* app) const 
+{
+	app->scene()->cube().LPrime();
+	app->solver().move(Move::LPrime);
+};
+void Commands::R::execute(Application* app) const 
+{
+	app->scene()->cube().R();
+	app->solver().move(Move::R);
+};
+void Commands::RPrime::execute(Application* app) const 
+{
+	app->scene()->cube().RPrime();
+	app->solver().move(Move::RPrime);
+};
+void Commands::F::execute(Application* app) const 
+{
+	app->scene()->cube().F();
+	app->solver().move(Move::F);
+};
+void Commands::FPrime::execute(Application* app) const 
+{
+	app->scene()->cube().FPrime();
+	app->solver().move(Move::FPrime);
+};
+void Commands::B::execute(Application* app) const 
+{
+	app->scene()->cube().B();
+	app->solver().move(Move::B);
+};
+void Commands::BPrime::execute(Application* app) const 
+{
+	app->scene()->cube().BPrime();
+	app->solver().move(Move::BPrime);
+};
 
 // Camera
 void Commands::ResetCamera::execute(Application* app) const
