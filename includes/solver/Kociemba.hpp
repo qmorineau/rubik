@@ -9,14 +9,15 @@
 class Kociemba
 {
 	public:
-		Kociemba() = default;
+		Kociemba();
 		~Kociemba() = default;
 
-		std::vector<std::string> solve(Cube c);
+		std::vector<Move> solve(Cube& c);
 	private:
-
-		void _phase1();
-		void _phase2();
+		void phase1Search(Cube& cube, std::vector<Move>& solution);
+		void phase2Search();
+		std::vector<Move>	_inverses;
+		std::vector<Move>	_moves;
 };
 
 #endif

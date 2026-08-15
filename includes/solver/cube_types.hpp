@@ -69,7 +69,7 @@ enum class Move : uint8_t
 	B, BPrime, B2,
 	COUNT
 };
-
+ 
 template <typename EnumT>
 constexpr auto toIndex(EnumT e) noexcept
 {
