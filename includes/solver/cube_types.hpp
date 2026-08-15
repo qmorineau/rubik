@@ -59,6 +59,16 @@ enum class CornerPos : uint8_t
 	DBL = 7
 };
 
+enum class Move : uint8_t
+{
+	U, UPrime, U2,
+	D, DPrime, D2,
+	L, LPrime, L2,
+	R, RPrime, R2,
+	F, FPrime, F2,
+	B, BPrime, B2
+};
+
 template <typename EnumT>
 constexpr auto toIndex(EnumT e) noexcept
 {

@@ -170,20 +170,23 @@ void RubikCube::update(float delta)
 			_cubelets[_animCorners[i]].orient = rot.mul_mat(_startCornerOrient[i]);
 		}
 
-		if (_animAngle < 0)
+		for (int n = 0; n < std::abs(_animAngle / 90); n ++)
 		{
-			for (int i = 0; i < 3; i++)
+			if (_animAngle < 0)
 			{
-				std::swap(_cubelets[_animEdges[i]].orient, _cubelets[_animEdges[i + 1]].orient);
-				std::swap(_cubelets[_animCorners[i]].orient, _cubelets[_animCorners[i + 1]].orient);
+				for (int i = 0; i < 3; i++)
+				{
+					std::swap(_cubelets[_animEdges[i]].orient, _cubelets[_animEdges[i + 1]].orient);
+					std::swap(_cubelets[_animCorners[i]].orient, _cubelets[_animCorners[i + 1]].orient);
+				}
 			}
-		}
-		else
-		{
-			for (int i = 3; i > 0; i--)
+			else
 			{
-				std::swap(_cubelets[_animEdges[i]].orient, _cubelets[_animEdges[i - 1]].orient);
-				std::swap(_cubelets[_animCorners[i]].orient, _cubelets[_animCorners[i - 1]].orient);
+				for (int i = 3; i > 0; i--)
+				{
+					std::swap(_cubelets[_animEdges[i]].orient, _cubelets[_animEdges[i - 1]].orient);
+					std::swap(_cubelets[_animCorners[i]].orient, _cubelets[_animCorners[i - 1]].orient);
+				}
 			}
 		}
 
