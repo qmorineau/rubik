@@ -81,6 +81,8 @@ $(GLFW_LIB): $(GLFW_SUBMODULE_OK)
 	@cd $(GLFW_BUILD_DIR) && make -j$(shell nproc)
 
 test: all
+	./$(NAME)
+scramble: all
 	./$(NAME) "U' B' R L' D2 L' R' F B U' F2 F' F2 L' D2 D' L U B' R' B2 L2 B2 L2 F' U2 U2 F' L2 U' L' D' F2 R2 U2 F2 U F' R' F2 U D2 R2 F2 D' L2"
 
 .PHONY: all re clean fclean submodules test

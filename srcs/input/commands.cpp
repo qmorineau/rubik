@@ -16,9 +16,15 @@ void Commands::ResetCube::execute(Application* app) const
 }
 void Commands::ScrambleCube::execute(Application* app) const
 {
-	for (auto i = 0; i < 30; i++)
+	size_t length = 30;
+	std::cout << "Scramble 30 moves:";
+	int randomNum = -3;
+	int	lastAxis = -1;
+	for (size_t i = 0; i < length; i++)
 	{
-		int randomNum = rand() % static_cast<int>(Move::COUNT);
+		while (randomNum / 3 == lastAxis)
+			randomNum = rand() % static_cast<int>(Move::COUNT);
+		lastAxis = randomNum / 3;
 		Move m = static_cast<Move>(randomNum);
 
 		app->scene()->cube().move(m);

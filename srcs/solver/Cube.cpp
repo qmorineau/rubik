@@ -34,6 +34,31 @@ void Cube::move(Move move)
     (this->*(it->second))();
 }
 
+int Cube::edgeOrientCoord() const
+{
+	int coord = 0;
+
+    for (int i = 0; i < 11; ++i)
+        coord = coord * 2 + _edge_orient[i];
+
+    return (coord);
+}
+
+int Cube::cornerOrientCoord() const
+{
+	int coord = 0;
+
+    for (int i = 0; i < 7; ++i)
+        coord = coord * 2 + _corner_orient[i];
+
+    return (coord);
+}
+
+int Cube::sliceCoord() const
+{
+	return (0);
+}
+
 void Cube::print() const
 {
 	// Edges

@@ -18,6 +18,9 @@ class Cube
 		void reset();
 		void print() const;
 		// getters
+		int								edgeOrientCoord() const;
+		int								cornerOrientCoord() const;
+		int								sliceCoord() const;
 		const std::array<EdgeId, 12>	edgePerm() const {return _edge_perm;};
 		const std::array<CornerId, 8>	cornerPerm() const {return _corner_perm;};
 		const std::array<uint8_t, 12>	edgeOrient() const {return _edge_orient;};
