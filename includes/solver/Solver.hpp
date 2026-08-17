@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "Cube.hpp"
+#include "Kociemba.hpp"
 
 class Solver
 {
@@ -16,7 +17,8 @@ class Solver
 		const Cube& cube() const {return _cube;};
 		Cube& cube() {return _cube;};
 	private:
-		Cube	_cube;
+		Cube		_cube;
+		Kociemba	_kociamba;
 };
 
 #endif

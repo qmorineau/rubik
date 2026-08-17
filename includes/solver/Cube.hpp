@@ -25,6 +25,10 @@ class Cube
 		const std::array<CornerId, 8>	cornerPerm() const {return _corner_perm;};
 		const std::array<uint8_t, 12>	edgeOrient() const {return _edge_orient;};
 		const std::array<uint8_t, 8>	cornerOrient() const {return _corner_orient;};
+		// setters
+		void							setFromCornersOrient(int coord);
+		void							setFromEdgesOrient(int coord);
+		void							setFromSlicesOrient(int coord);
 	private:
 		std::array<EdgeId, 12>		_edge_perm;
 		std::array<CornerId, 8>		_corner_perm;

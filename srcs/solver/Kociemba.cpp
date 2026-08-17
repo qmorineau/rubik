@@ -21,13 +21,13 @@ std::vector<Move> Kociemba::solve(Cube& c)
 
 void Kociemba::initMoves()
 {
-	_movesP1.reserve(static_cast<size_t>(Move::COUNT));
+	_allMoves.reserve(static_cast<size_t>(Move::COUNT));
 	_movesP2.reserve(static_cast<size_t>(Move::COUNT) - 8);
 	_inverses.reserve(static_cast<size_t>(Move::COUNT));
 
 	for (uint8_t i = 0; i < static_cast<uint8_t>(Move::COUNT); i++)
 	{
-		_movesP1.push_back(static_cast<Move>(i));
+		_allMoves.push_back(static_cast<Move>(i));
 		if (i < 6 || i % 3 == 2)
 			_movesP2.push_back(static_cast<Move>(i));
 		switch (i % 3)
@@ -49,40 +49,73 @@ void Kociemba::createEdgesOrientTable()
 {
 	_edgesOrientTable.fill(-1);
 
-	std::queue<int> queue;
+	std::queue<int>	toExplore;
 
 	_edgesOrientTable[0] = 0;
-	queue.push(0);
+	toExplore.push(0);
 
-	while (!queue.empty())
+	while (!toExplore.empty())
 	{
-	    int coord = queue.front();
-	    queue.pop();
+		int coord = toExplore.front();
+		toExplore.pop();
+		int currentDist = _edgesOrientTable[coord];
 
-	    for (size_t m = 0; m < toIndex(Move::COUNT); m++)
-	    {
-	        int next = edgeOrientMove[coord][m];
+		Cube current;
+		current.setFromEdgesOrient(coord);
 
-	        if (_edgesOrientTable[next] == -1)
-	        {
-	            _edgesOrientTable[next] = _edgesOrientTable[coord] + 1;
-	            queue.push(next);
-	        }
-	    }
+		for (size_t m = 0; m < static_cast<size_t>(Move::COUNT); m++)
+		{
+			Cube tmp = current;
+			tmp.move(_allMoves[m]);
+			int newCoord = tmp.edgeOrientCoord();
+			if (_edgesOrientTable[newCoord] == -1)
+			{
+				_edgesOrientTable[newCoord] = currentDist + 1;
+				toExplore.push(newCoord);
+			}
+		}
 	}
 }
 
 void Kociemba::createCornersOrientTable()
 {
+	_cornersOrientTable.fill(-1);
 
+	std::queue<int>	toExplore;
+
+	_cornersOrientTable[0] = 0;
+	toExplore.push(0);
+
+	while (!toExplore.empty())
+	{
+		int coord = toExplore.front();
+		toExplore.pop();
+		int currentDist = _cornersOrientTable[coord];
+
+		Cube current;
+		current.setFromCornersOrient(coord);
+
+		for (size_t m = 0; m < static_cast<size_t>(Move::COUNT); m++)
+		{
+			Cube tmp = current;
+			tmp.move(_allMoves[m]);
+			int newCoord = tmp.cornerOrientCoord();
+			if (_cornersOrientTable[newCoord] == -1)
+			{
+				_cornersOrientTable[newCoord] = currentDist + 1;
+				toExplore.push(newCoord);
+			}
+		}
+	}
 }
 
 void Kociemba::phase1Search(Cube& cube, std::vector<Move>& solution)
 {
+
 	for (uint8_t i = 0; i < static_cast<uint8_t>(Move::COUNT); i++)
 	{
-		solution.push_back(_movesP1[i]);
-		cube.move(_movesP1[i]);
+		solution.push_back(_allMoves[i]);
+		cube.move(_allMoves[i]);
 		phase1Search(cube, solution);
 		cube.move(_inverses[i]);
 		solution.pop_back();

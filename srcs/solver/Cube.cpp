@@ -1,5 +1,7 @@
 #include "Cube.hpp"
 
+#include "commands.hpp"
+
 Cube::Cube()
 {
 	_moves.emplace(Move::U, &Cube::U);
@@ -34,30 +36,63 @@ void Cube::move(Move move)
     (this->*(it->second))();
 }
 
+// Getters
+
 int Cube::edgeOrientCoord() const
 {
 	int coord = 0;
-
-    for (int i = 0; i < 11; ++i)
-        coord = coord * 2 + _edge_orient[i];
-
-    return (coord);
+	
+	for (int i = 0; i < 11; i++)
+		coord = (coord << 1) | _edge_orient[i];
+	return (coord);
 }
 
 int Cube::cornerOrientCoord() const
 {
 	int coord = 0;
 
-    for (int i = 0; i < 7; ++i)
-        coord = coord * 2 + _corner_orient[i];
-
-    return (coord);
+	for (int i = 0; i < 7; i++)
+		coord = coord * 3 + _corner_orient[i];
+	return (coord);
 }
 
 int Cube::sliceCoord() const
 {
-	return (0);
+	return (0); // todo
 }
+
+// Setters
+
+void Cube::setFromEdgesOrient(int coord)
+{
+	int sum = 0;
+	for (int i = 0; i < 11; i++)
+	{
+		int bit = (coord >> (10 - i)) & 1;
+		_edge_orient[i] = bit;
+		sum += bit;
+	}
+	_edge_orient[11] = sum % 2; // 12th edges depend of the 11 others
+}
+
+void Cube::setFromCornersOrient(int coord)
+{
+	int sum = 0;
+	for (int i = 6; i >= 0; i--)
+	{
+		_corner_orient[i] = coord % 3;
+		sum += _corner_orient[i];
+		coord /= 3;
+	}
+	_corner_orient[7] = (3 - (sum % 3)) % 3; // 8th corners depend of the 7 others
+}
+
+void Cube::setFromSlicesOrient(int coord)
+{
+	(void) coord; // to do
+}
+
+// Helpers
 
 void Cube::print() const
 {
@@ -97,6 +132,8 @@ void Cube::reset()
 		_corner_orient[i] = 0;
 	}
 }
+
+// Moves
 
 void Cube::applyEdgeCycle(const EdgePos cycle[4], const uint8_t orientDelta[4])
 {

@@ -16,10 +16,18 @@ void Commands::ResetCube::execute(Application* app) const
 }
 void Commands::ScrambleCube::execute(Application* app) const
 {
+	static bool seeded = 0;
 	size_t length = 30;
-	std::cout << "Scramble 30 moves:";
 	int randomNum = -3;
 	int	lastAxis = -1;
+
+	if (!seeded)
+	{
+		srand(clock());
+		seeded = 1;
+	}
+
+	std::cout << "Scramble "<< length << " moves:";
 	for (size_t i = 0; i < length; i++)
 	{
 		while (randomNum / 3 == lastAxis)
