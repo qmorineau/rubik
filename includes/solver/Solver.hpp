@@ -2,6 +2,7 @@
 #define SOLVER_HPP
 
 #include <vector>
+#include <ctime>
 
 #include "Cube.hpp"
 #include "Kociemba.hpp"

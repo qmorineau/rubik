@@ -6,8 +6,11 @@ Solver::~Solver() = default;
 
 std::vector<Move> Solver::solve()
 {
-	_kociemba.solve(_cube);
-	return
+	clock_t begin = clock();
+	auto solution = _kociemba.solve(_cube);
+	clock_t duration = clock() - begin;
+	std::cout << "time to solve = " << static_cast<float>(duration) / CLOCKS_PER_SEC << std::endl;
+	return solution;
 }
 
 void Solver::move(Move m)
