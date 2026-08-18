@@ -28,7 +28,7 @@ class Cube
 		// setters
 		void							setFromCornersOrient(int coord);
 		void							setFromEdgesOrient(int coord);
-		void							setFromSlicesOrient(int coord);
+		void							setFromSlice(int coord);
 	private:
 		std::array<EdgeId, 12>		_edge_perm;
 		std::array<CornerId, 8>		_corner_perm;

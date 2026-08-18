@@ -8,6 +8,7 @@ ScancodeResolver::ScancodeResolver()
 	_table[static_cast<int>(Scancode::KEY_TAB)] = resolve(GLFW_KEY_TAB, "KEY_TAB");
 	_table[static_cast<int>(Scancode::KEY_SPACE)] = resolve(GLFW_KEY_SPACE, "KEY_SPACE");
 	_table[static_cast<int>(Scancode::KEY_ENTER)] = resolve(GLFW_KEY_ENTER, "KEY_ENTER");
+	_table[static_cast<int>(Scancode::KEY_1)] = resolve(GLFW_KEY_1, "KEY_1");
 	_table[static_cast<int>(Scancode::KEY_W)] = resolve(GLFW_KEY_W, "KEY_W");
 	_table[static_cast<int>(Scancode::KEY_A)] = resolve(GLFW_KEY_A, "KEY_A");
 	_table[static_cast<int>(Scancode::KEY_S)] = resolve(GLFW_KEY_S, "KEY_S");

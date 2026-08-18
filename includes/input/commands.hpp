@@ -12,6 +12,7 @@ namespace Commands
     class CloseWindow : public ICommand {void execute(Application* app) const override;};
 	// Cube
 	class ResetCube : public ICommand {void execute(Application* app) const override;};
+	class SolveCube : public ICommand {void execute(Application* app) const override;};
 	class ScrambleCube : public ICommand {void execute(Application* app) const override;};
 	// Move
 	class U : public ICommand {void execute(Application* app) const override;};

@@ -5,6 +5,7 @@
 #include <string>
 #include <array>
 #include <queue>
+#include <algorithm>
 
 #include "Cube.hpp"
 
@@ -23,11 +24,12 @@ class Kociemba
 		std::array<int, 2187>		_cornersOrientTable;	// 2187 = 3^7  => 8th corners depend of the 7 others
 		std::array<int, 495>		_sliceTable;			// 495 = (12! / (4! * 8!)) => (12! / 8!) / 4! => (12 * 11 * 10 * 9) / (4 * 3 * 2 * 1)
  
-		void phase1Search(Cube& cube, std::vector<Move>& solution);
+		bool phase1Search(Cube& cube, std::vector<Move>& solution, int depth, Move lastMove);
 		void phase2Search(Cube& cube, std::vector<Move>& solution);
 		void initMoves();
 		void createEdgesOrientTable();
 		void createCornersOrientTable();
+		void createSliceTable();
 };
 
 #endif

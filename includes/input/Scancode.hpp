@@ -5,6 +5,7 @@ enum class Scancode
 {
 	KEY_ESC = 0,
 	KEY_TAB,
+	KEY_1,
 	KEY_W,
 	KEY_A,
 	KEY_S,

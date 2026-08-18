@@ -12,7 +12,8 @@ class Solver
 		Solver();
 		~Solver();
 
-		void move(Move m);
+		void 				move(Move m);
+		std::vector<Move>	solve();
 		// getter
 		const Cube& cube() const {return _cube;};
 		Cube& cube() {return _cube;};

@@ -14,6 +14,18 @@ void Commands::ResetCube::execute(Application* app) const
 	app->scene()->cube().reset();
 	app->solver().cube().reset();
 }
+void Commands::SolveCube::execute(Application* app) const
+{
+	auto solution = app->solver().solve();
+
+	for (auto m : solution)
+	{
+		app->scene()->cube().move(m);
+		app->solver().cube().move(m);
+	}
+	app->solver().cube().print();
+	std::cout << "MOVES NBR = " << solution.size() << std::endl;
+}
 void Commands::ScrambleCube::execute(Application* app) const
 {
 	static bool seeded = 0;
@@ -92,6 +104,7 @@ void Commands::FPrime::execute(Application* app) const
 };
 void Commands::B::execute(Application* app) const 
 {
+	app->solver().cube().print();
 	app->scene()->cube().B();
 	app->solver().move(Move::B);
 };

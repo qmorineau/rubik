@@ -18,7 +18,8 @@ InputHandler::InputHandler()
 	onPressedMap[IK{_scancodes.get(SC::KEY_TAB), 0}] = std::make_unique<Commands::EnableMouse>();
 	onPressedMap[IK{_scancodes.get(SC::KEY_R), 0}] = std::make_unique<Commands::ResetCamera>();
 	onPressedMap[IK{_scancodes.get(SC::KEY_ENTER), 0}] = std::make_unique<Commands::ScrambleCube>();
-	onPressedMap[IK{_scancodes.get(SC::KEY_SPACE), 0}] = std::make_unique<Commands::ResetCube>();
+	onPressedMap[IK{_scancodes.get(SC::KEY_SPACE), 0}] = std::make_unique<Commands::SolveCube>();
+	onPressedMap[IK{_scancodes.get(SC::KEY_1), 0}] = std::make_unique<Commands::ResetCube>();
 	onPressedMap[IK{_scancodes.get(SC::KEY_LEFT), 0}] = std::make_unique<Commands::L>();
 	onPressedMap[IK{_scancodes.get(SC::KEY_LEFT), GLFW_MOD_CONTROL}] = std::make_unique<Commands::LPrime>();
 	onPressedMap[IK{_scancodes.get(SC::KEY_RIGHT), 0}] = std::make_unique<Commands::R>();

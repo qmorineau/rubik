@@ -56,9 +56,30 @@ int Cube::cornerOrientCoord() const
 	return (coord);
 }
 
+static int binomial(int n, int k)
+{
+	if (k < 0 || k > n)
+		return 0;
+	int result = 1;
+	for (int i = 0; i < k; i++)
+		result = result * (n - i) / (i + 1);
+    return result;
+}
+
 int Cube::sliceCoord() const
 {
-	return (0); // todo
+    int coord = 0;
+    int k = 0; // slice edge encounter
+
+    for (int i = 0; i < 12; i++)
+    {
+        bool isSliceEdge = (_edge_perm[i] >= EdgeId::FL);
+        if (isSliceEdge)
+            k++;
+        else
+            coord += binomial(11 - i, k);
+    }
+    return coord;
 }
 
 // Setters
@@ -87,9 +108,43 @@ void Cube::setFromCornersOrient(int coord)
 	_corner_orient[7] = (3 - (sum % 3)) % 3; // 8th corners depend of the 7 others
 }
 
-void Cube::setFromSlicesOrient(int coord)
+void Cube::setFromSlice(int coord)
 {
-	(void) coord; // to do
+    int k = 4; // il reste 4 arêtes de tranche à placer
+    bool isSlice[12];
+
+    for (int i = 0; i < 12; i++)
+    {
+        int remaining = 11 - i; // positions restantes après celle-ci
+        int c = binomial(remaining, k);
+
+        if (coord >= c && k > 0)
+        {
+            // Ce n'est PAS une arête de tranche ici
+            isSlice[i] = false;
+            coord -= c;
+        }
+        else
+        {
+            // C'est une arête de tranche ici
+            isSlice[i] = true;
+            k--;
+        }
+    }
+    // isSlice[i] == true veut dire "position i contient une des 4 arêtes de tranche"
+    // ... (voir étape suivante)
+	EdgeId sliceIds[4] = {EdgeId::FL, EdgeId::FR, EdgeId::BL, EdgeId::BR};
+EdgeId nonSliceIds[8] = {EdgeId::UF, EdgeId::UR, EdgeId::UB, EdgeId::UL,
+                          EdgeId::DF, EdgeId::DR, EdgeId::DB, EdgeId::DL};
+int si = 0, nsi = 0;
+
+for (int i = 0; i < 12; i++)
+{
+    if (isSlice[i])
+        _edge_perm[i] = sliceIds[si++];
+    else
+        _edge_perm[i] = nonSliceIds[nsi++];
+}
 }
 
 // Helpers

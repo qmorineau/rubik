@@ -10,13 +10,16 @@ Kociemba::Kociemba()
 
 	createEdgesOrientTable();
 	createCornersOrientTable();
+	createSliceTable();
 }
 
 std::vector<Move> Kociemba::solve(Cube& c)
 {
-	(void) c;
-	std::vector<Move> l;
-	return l;
+	std::vector<Move> solution;
+
+	Cube toSolve = c;
+	phase1Search(toSolve, solution, 0, Move::COUNT);
+	return (solution);
 };
 
 void Kociemba::initMoves()
@@ -109,17 +112,60 @@ void Kociemba::createCornersOrientTable()
 	}
 }
 
-void Kociemba::phase1Search(Cube& cube, std::vector<Move>& solution)
+void Kociemba::createSliceTable()
 {
+	_sliceTable.fill(-1);
+
+	std::queue<int>	toExplore;
+
+	_sliceTable[0] = 0;
+	toExplore.push(0);
+
+	while (!toExplore.empty())
+	{
+		int coord = toExplore.front();
+		toExplore.pop();
+		int currentDist = _sliceTable[coord];
+
+		Cube current;
+		current.setFromSlice(coord);
+
+		for (size_t m = 0; m < static_cast<size_t>(Move::COUNT); m++)
+		{
+			Cube tmp = current;
+			tmp.move(_allMoves[m]);
+			int newCoord = tmp.sliceCoord();
+			if (_sliceTable[newCoord] == -1)
+			{
+				_sliceTable[newCoord] = currentDist + 1;
+				toExplore.push(newCoord);
+			}
+		}
+	}
+}
+
+bool Kociemba::phase1Search(Cube& cube, std::vector<Move>& solution, int depth, Move lastMove)
+{
+	int heuristic = std::max(_edgesOrientTable[cube.edgeOrientCoord()], _cornersOrientTable[cube.cornerOrientCoord()]);
+	heuristic = std::max(heuristic, _sliceTable[cube.sliceCoord()]);
+
+	if (depth + heuristic > 15)
+		return (false);
+	if (heuristic == 0)
+		return (true);
 
 	for (uint8_t i = 0; i < static_cast<uint8_t>(Move::COUNT); i++)
 	{
-		solution.push_back(_allMoves[i]);
+		if (toIndex(lastMove) / 6 == i / 6)
+			continue;
 		cube.move(_allMoves[i]);
-		phase1Search(cube, solution);
-		cube.move(_inverses[i]);
+		solution.push_back(_allMoves[i]);
+		if (phase1Search(cube, solution, depth + 1, _allMoves[i]))
+			return (true);
 		solution.pop_back();
+		cube.move(_inverses[i]);
 	}
+	return (false);
 };
 
 void Kociemba::phase2Search(Cube& cube, std::vector<Move>& solution)
@@ -133,23 +179,3 @@ void Kociemba::phase2Search(Cube& cube, std::vector<Move>& solution)
 		solution.pop_back();
 	}	
 };
-
-
-/* 
-bool phase1Search(Cube& cube, int depth, int maxDepth, std::vector<Move>& solution) {
-    int h = std::max(edgeOrientTable[cube.edgeOrientCoord()],
-                      cornerOrientTable[cube.cornerOrientCoord()]);
-    // (+ table de position de tranche, prise en compte pareil)
-    if (depth + h > maxDepth) return false; // coupe la branche
-    if (h == 0) return true; // phase 1 terminée
-
-    for (Move m : ALL_18_MOVES) {
-        cube.move(m);
-        solution.push_back(m);
-        if (phase1Search(cube, depth + 1, maxDepth, solution)) return true;
-        solution.pop_back();
-        cube.move(inverse(m)); // annule pour essayer le mouvement suivant
-    }
-    return false;
-}
- */
