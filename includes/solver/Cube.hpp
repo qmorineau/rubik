@@ -17,18 +17,28 @@ class Cube
 		void move(Move m);
 		void reset();
 		void print() const;
+
+		// Edge Coord
+		int		edgeOrientCoord() const;
+		void	setFromEdgesOrient(int coord);
+		int		edgePermCoord() const;
+		void	setFromEdgesPerm(int coord);
+		// Corner Coord
+		int		cornerOrientCoord() const;
+		void	setFromCornersOrient(int coord);
+		int		cornerPermCoord() const;
+		void	setFromCornersPerm(int coord);
+		// Slice Coord
+		int		sliceCoord() const;
+		void	setFromSlice(int coord);
+		int		slicePermCoord() const;
+		void	setFromSlicePerm(int coord);
+
 		// getters
-		int								edgeOrientCoord() const;
-		int								cornerOrientCoord() const;
-		int								sliceCoord() const;
 		const std::array<EdgeId, 12>	edgePerm() const {return _edge_perm;};
 		const std::array<CornerId, 8>	cornerPerm() const {return _corner_perm;};
 		const std::array<uint8_t, 12>	edgeOrient() const {return _edge_orient;};
 		const std::array<uint8_t, 8>	cornerOrient() const {return _corner_orient;};
-		// setters
-		void							setFromCornersOrient(int coord);
-		void							setFromEdgesOrient(int coord);
-		void							setFromSlice(int coord);
 	private:
 		std::array<EdgeId, 12>		_edge_perm;
 		std::array<CornerId, 8>		_corner_perm;
@@ -36,7 +46,7 @@ class Cube
 		std::array<uint8_t, 8>		_corner_orient;
 
 		std::unordered_map<Move, void (Cube::*)()>	_moves;
-
+		bool isSliceEdge(EdgeId e) const;
 		void applyEdgeCycle(const EdgePos cycle[4], const uint8_t orientDelta[4]);
 		void applyCornerCycle(const CornerPos cycle[4], const uint8_t orientDelta[4]);
 		void U();

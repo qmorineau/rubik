@@ -11,7 +11,77 @@ Kociemba::Kociemba()
 	createEdgesOrientTable();
 	createCornersOrientTable();
 	createSliceTable();
+	createEdgesPermTable();
+	createCornersPermTable();
+	createSlicePermTable();
+
+// 	for (int coord = 0; coord < 40320; ++coord)
+// {
+//     Cube cube;
+//     cube.setFromCornersPerm(coord);
+
+//     if (cube.cornerPermCoord() != coord)
+//     {
+//         std::cout << "corner ERREUR : " << coord
+//                   << " -> " << cube.cornerPermCoord()
+//                   << '\n';
+//         break;
+//     }
+// }
+// 	for (int coord = 0; coord < 40320; ++coord)
+// {
+//     Cube cube;
+//     cube.setFromEdgesPerm(coord);
+
+//     if (cube.edgePermCoord() != coord)
+//     {
+//         std::cout << "edges ERREUR : " << coord
+//                   << " -> " << cube.edgePermCoord()
+//                   << '\n';
+//         break;
+//     }
+// }
 }
+
+// #include <map>
+// void Kociemba::test()
+// {
+// 	std::map<int, int> map;
+
+// 	_cornersOrientTable.fill(-1);
+
+// 	std::queue<int>	toExplore;
+
+// 	map.try_emplace(0, 0);
+// 	toExplore.push(0);
+
+// 	while (!toExplore.empty())
+// 	{
+// 		int coord = toExplore.front();
+// 		toExplore.pop();
+// 		int currentDist = map.at(coord);
+
+// 		Cube current;
+// 		current.setFromEdgesPerm(coord);
+
+// 		for (auto m : _movesP2)
+// 		{
+// 			Cube tmp = current;
+// 			tmp.move(m);
+// 			int newCoord = tmp.edgePermCoord();
+// 			try
+// 			{
+// 				map.at(newCoord);
+// 			}
+// 			catch(const std::exception& e)
+// 			{
+// 				map.try_emplace(newCoord, currentDist + 1);
+// 				toExplore.push(newCoord);
+// 			}
+// 		}
+// 	}
+// 	std::cout << "Map = " << map.size() << std::endl;
+// }
 
 std::vector<Move> Kociemba::solve(Cube& c)
 {
@@ -19,6 +89,7 @@ std::vector<Move> Kociemba::solve(Cube& c)
 
 	Cube toSolve = c;
 	phase1Search(toSolve, solution, 0, Move::COUNT);
+	phase2Search(toSolve, solution, 0, Move::COUNT);
 	return (solution);
 };
 
@@ -144,12 +215,108 @@ void Kociemba::createSliceTable()
 	}
 }
 
+void Kociemba::createEdgesPermTable()
+{
+	_edgesPermTable.fill(-1);
+
+	std::queue<int>	toExplore;
+
+	_edgesPermTable[0] = 0;
+	toExplore.push(0);
+
+	while (!toExplore.empty())
+	{
+		int coord = toExplore.front();
+		toExplore.pop();
+		int currentDist = _edgesPermTable[coord];
+
+		Cube current;
+		current.setFromEdgesPerm(coord);
+
+		for (auto m : _movesP2)
+		{
+			Cube tmp = current;
+			tmp.move(m);
+			int newCoord = tmp.edgePermCoord();
+			if (_edgesPermTable[newCoord] == -1)
+			{
+				_edgesPermTable[newCoord] = currentDist + 1;
+				toExplore.push(newCoord);
+			}
+		}
+	}
+}
+
+void Kociemba::createCornersPermTable()
+{
+	_cornersPermTable.fill(-1);
+
+	std::queue<int>	toExplore;
+
+	_cornersPermTable[0] = 0;
+	toExplore.push(0);
+
+	while (!toExplore.empty())
+	{
+		int coord = toExplore.front();
+		toExplore.pop();
+		int currentDist = _cornersPermTable[coord];
+
+		Cube current;
+		current.setFromCornersPerm(coord);
+
+		for (auto m : _movesP2)
+		{
+			Cube tmp = current;
+			tmp.move(m);
+			int newCoord = tmp.cornerPermCoord();
+			if (_cornersPermTable[newCoord] == -1)
+			{
+				_cornersPermTable[newCoord] = currentDist + 1;
+				toExplore.push(newCoord);
+			}
+		}
+	}
+}
+
+void Kociemba::createSlicePermTable()
+{
+	_slicePermTable.fill(-1);
+
+	std::queue<int>	toExplore;
+
+	_slicePermTable[0] = 0;
+	toExplore.push(0);
+
+	while (!toExplore.empty())
+	{
+		int coord = toExplore.front();
+		toExplore.pop();
+		int currentDist = _slicePermTable[coord];
+
+		Cube current;
+		current.setFromSlicePerm(coord);
+
+		for (auto m : _movesP2)
+		{
+			Cube tmp = current;
+			tmp.move(m);
+			int newCoord = tmp.slicePermCoord();
+			if (_slicePermTable[newCoord] == -1)
+			{
+				_slicePermTable[newCoord] = currentDist + 1;
+				toExplore.push(newCoord);
+			}
+		}
+	}
+}
+
 bool Kociemba::phase1Search(Cube& cube, std::vector<Move>& solution, int depth, Move lastMove)
 {
 	int heuristic = std::max(_edgesOrientTable[cube.edgeOrientCoord()], _cornersOrientTable[cube.cornerOrientCoord()]);
 	heuristic = std::max(heuristic, _sliceTable[cube.sliceCoord()]);
 
-	if (depth + heuristic > 15)
+	if (depth + heuristic > 30)
 		return (false);
 	if (heuristic == 0)
 		return (true);
@@ -168,14 +335,27 @@ bool Kociemba::phase1Search(Cube& cube, std::vector<Move>& solution, int depth, 
 	return (false);
 };
 
-void Kociemba::phase2Search(Cube& cube, std::vector<Move>& solution)
+bool Kociemba::phase2Search(Cube& cube, std::vector<Move>& solution, int depth, Move lastMove)
 {
-	for (auto m : _movesP2)
+	int heuristic = std::max(_edgesPermTable[cube.edgePermCoord()], _cornersPermTable[cube.cornerPermCoord()]);
+	heuristic = std::max(heuristic, _slicePermTable[cube.slicePermCoord()]);
+
+	if (depth + heuristic > 18)
+		return (false);
+	if (heuristic == 0)
+		return (true);
+
+	for (uint8_t i = 0; i < _movesP2.size(); i++)
 	{
-		solution.push_back(m);
+		Move m = _movesP2[i];
+		if (toIndex(lastMove) / 3 == toIndex(m) / 3)
+			continue;
 		cube.move(m);
-		phase2Search(cube, solution);
-		cube.move(_inverses[toIndex(m)]);
+		solution.push_back(m);
+		if (phase2Search(cube, solution, depth + 1, m))
+			return (true);
 		solution.pop_back();
-	}	
+		cube.move(_inverses[toIndex(m)]);
+	}
+	return (false);
 };

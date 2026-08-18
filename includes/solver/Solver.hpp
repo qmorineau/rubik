@@ -19,7 +19,7 @@ class Solver
 		Cube& cube() {return _cube;};
 	private:
 		Cube		_cube;
-		Kociemba	_kociamba;
+		Kociemba	_kociemba;
 };
 
 #endif

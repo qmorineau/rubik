@@ -36,7 +36,7 @@ class Application
 		InputManager&	inputManager()		{return _inputManager;};
 		InputHandler&	inputHandler()		{return _inputHandler;};
 		InputContext&	inputContext()		{return _inputContext;};
-
+		bool			debug()				{return _debug;};
 	private:
 		Parser				_parser;
 		Window				_window;
@@ -48,6 +48,7 @@ class Application
 		Solver				_solver;
 		float				_deltaTime = 0.0f;
 		float				_lastFrame = 0.0f;
+		bool				_debug = 1;
 
 		void 		renderLoop();
 		void 		endFrame();

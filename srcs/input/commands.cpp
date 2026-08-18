@@ -18,11 +18,13 @@ void Commands::SolveCube::execute(Application* app) const
 {
 	auto solution = app->solver().solve();
 
+	std::cout << "Solving moves:";
 	for (auto m : solution)
 	{
 		app->scene()->cube().move(m);
 		app->solver().cube().move(m);
 	}
+	std::cout << std::endl;
 	app->solver().cube().print();
 	std::cout << "MOVES NBR = " << solution.size() << std::endl;
 }
@@ -56,62 +58,85 @@ void Commands::ScrambleCube::execute(Application* app) const
 void Commands::U::execute(Application* app) const {
 	app->scene()->cube().U();
 	app->solver().move(Move::U);
+	if (app->debug())
+		app->solver().cube().print();
 };
 void Commands::UPrime::execute(Application* app) const
 {
 	app->scene()->cube().UPrime();
 	app->solver().move(Move::UPrime);
+	if (app->debug())
+		app->solver().cube().print();
 };
 void Commands::D::execute(Application* app) const 
 {
 	app->scene()->cube().D();
 	app->solver().move(Move::D);
+	if (app->debug())
+		app->solver().cube().print();
 };
 void Commands::DPrime::execute(Application* app) const 
 {
 	app->scene()->cube().DPrime();
 	app->solver().move(Move::DPrime);
+	if (app->debug())
+		app->solver().cube().print();
 };
 void Commands::L::execute(Application* app) const 
 {
 	app->scene()->cube().L();
 	app->solver().move(Move::L);
+	if (app->debug())
+		app->solver().cube().print();
 };
 void Commands::LPrime::execute(Application* app) const 
 {
 	app->scene()->cube().LPrime();
 	app->solver().move(Move::LPrime);
+	if (app->debug())
+		app->solver().cube().print();
 };
 void Commands::R::execute(Application* app) const 
 {
 	app->scene()->cube().R();
 	app->solver().move(Move::R);
+	if (app->debug())
+		app->solver().cube().print();
 };
 void Commands::RPrime::execute(Application* app) const 
 {
 	app->scene()->cube().RPrime();
 	app->solver().move(Move::RPrime);
+	if (app->debug())
+		app->solver().cube().print();
 };
 void Commands::F::execute(Application* app) const 
 {
 	app->scene()->cube().F();
 	app->solver().move(Move::F);
+	if (app->debug())
+		app->solver().cube().print();
 };
 void Commands::FPrime::execute(Application* app) const 
 {
 	app->scene()->cube().FPrime();
 	app->solver().move(Move::FPrime);
+	if (app->debug())
+		app->solver().cube().print();
 };
 void Commands::B::execute(Application* app) const 
 {
-	app->solver().cube().print();
 	app->scene()->cube().B();
 	app->solver().move(Move::B);
+	if (app->debug())
+		app->solver().cube().print();
 };
 void Commands::BPrime::execute(Application* app) const 
 {
 	app->scene()->cube().BPrime();
 	app->solver().move(Move::BPrime);
+	if (app->debug())
+		app->solver().cube().print();
 };
 
 // Camera

@@ -36,7 +36,7 @@ void Cube::move(Move move)
     (this->*(it->second))();
 }
 
-// Getters
+// Edge Coord
 
 int Cube::edgeOrientCoord() const
 {
@@ -46,43 +46,6 @@ int Cube::edgeOrientCoord() const
 		coord = (coord << 1) | _edge_orient[i];
 	return (coord);
 }
-
-int Cube::cornerOrientCoord() const
-{
-	int coord = 0;
-
-	for (int i = 0; i < 7; i++)
-		coord = coord * 3 + _corner_orient[i];
-	return (coord);
-}
-
-static int binomial(int n, int k)
-{
-	if (k < 0 || k > n)
-		return 0;
-	int result = 1;
-	for (int i = 0; i < k; i++)
-		result = result * (n - i) / (i + 1);
-    return result;
-}
-
-int Cube::sliceCoord() const
-{
-    int coord = 0;
-    int k = 0; // slice edge encounter
-
-    for (int i = 0; i < 12; i++)
-    {
-        bool isSliceEdge = (_edge_perm[i] >= EdgeId::FL);
-        if (isSliceEdge)
-            k++;
-        else
-            coord += binomial(11 - i, k);
-    }
-    return coord;
-}
-
-// Setters
 
 void Cube::setFromEdgesOrient(int coord)
 {
@@ -94,6 +57,59 @@ void Cube::setFromEdgesOrient(int coord)
 		sum += bit;
 	}
 	_edge_orient[11] = sum % 2; // 12th edges depend of the 11 others
+}
+
+int Cube::edgePermCoord() const
+{
+	int coord = 0;
+
+	for (int i = 0; i < 7; i++)
+	{
+		int count = 0;
+
+		for (int j = i + 1; j < 8; ++j)
+		{
+			if (static_cast<int>(_edge_perm[j]) < static_cast<int>(_edge_perm[i]))
+				++count;
+		}
+		coord = coord * (8 - i) + count;
+	}
+	return (coord);
+}
+
+void Cube::setFromEdgesPerm(int coord)
+{
+		EdgeId available[8] = {
+        EdgeId::UF, EdgeId::UR, EdgeId::UB, EdgeId::UL,
+        EdgeId::DF, EdgeId::DR, EdgeId::DB, EdgeId::DL
+    };
+
+    for (int i = 0; i < 8; ++i)
+    {
+        int factorial = 1;
+
+        for (int j = 2; j <= 7 - i; ++j)
+            factorial *= j;
+
+        int index = coord / factorial;
+		coord %= factorial;
+
+		_edge_perm[i] = available[index];
+
+        for (int j = index; j < 7 - i; ++j)
+            available[j] = available[j + 1];
+    }
+}
+
+// Corner Coord
+
+int Cube::cornerOrientCoord() const
+{
+	int coord = 0;
+
+	for (int i = 0; i < 7; i++)
+		coord = coord * 3 + _corner_orient[i];
+	return (coord);
 }
 
 void Cube::setFromCornersOrient(int coord)
@@ -108,43 +124,189 @@ void Cube::setFromCornersOrient(int coord)
 	_corner_orient[7] = (3 - (sum % 3)) % 3; // 8th corners depend of the 7 others
 }
 
+int Cube::cornerPermCoord() const
+{
+	int coord = 0;
+
+	for (int i = 0; i < 7; i++)
+	{
+		int count = 0;
+
+		for (int j = i + 1; j < 8; ++j)
+		{
+			if (static_cast<int>(_corner_perm[j]) < static_cast<int>(_corner_perm[i]))
+				++count;
+		}
+		coord = coord * (8 - i) + count;
+	}
+	return (coord);
+}
+
+void Cube::setFromCornersPerm(int coord)
+{
+	CornerId available[8] = {
+        CornerId::UFL, CornerId::UFR, CornerId::UBR, CornerId::UBL,
+        CornerId::DFL, CornerId::DFR, CornerId::DBR, CornerId::DBL
+    };
+
+    for (int i = 0; i < 8; ++i)
+    {
+        int factorial = 1;
+
+        for (int j = 2; j <= 7 - i; ++j)
+            factorial *= j;
+
+        int index = coord / factorial;
+		coord %= factorial;
+
+		_corner_perm[i] = available[index];
+
+        for (int j = index; j < 7 - i; ++j)
+            available[j] = available[j + 1];
+    }
+}
+
+// Slice Coord
+
+static int binomial(int n, int k)
+{
+	if (k < 0 || k > n)
+		return 0;
+	int result = 1;
+	for (int i = 0; i < k; i++)
+		result = result * (n - i) / (i + 1);
+    return result;
+}
+
+bool Cube::isSliceEdge(EdgeId e) const
+{
+	return (e == EdgeId::FL
+			|| e == EdgeId::FR
+			|| e == EdgeId::BL
+			|| e == EdgeId::BR);
+}
+
+int Cube::sliceCoord() const
+{
+    int coord = 0;
+    int k = 3; // 4 edge slice pos remaining
+
+    for (int i = 11; i >= 0 && k >= 0; i--)
+    {
+        if (isSliceEdge(_edge_perm[i]))
+            k--;
+        else
+            coord += binomial(i, k);
+    }
+    return (coord);
+}
+
 void Cube::setFromSlice(int coord)
 {
-    int k = 4; // il reste 4 arêtes de tranche à placer
-    bool isSlice[12];
+    int k = 3; // 4 edge slice pos remaining
+    bool isSlice[12] = {};
 
-    for (int i = 0; i < 12; i++)
+    for (int i = 11; i >= 0; i--)
     {
-        int remaining = 11 - i; // positions restantes après celle-ci
-        int c = binomial(remaining, k);
+		if (k < 0)
+			break;
 
-        if (coord >= c && k > 0)
-        {
-            // Ce n'est PAS une arête de tranche ici
-            isSlice[i] = false;
-            coord -= c;
-        }
-        else
-        {
-            // C'est une arête de tranche ici
-            isSlice[i] = true;
-            k--;
-        }
-    }
-    // isSlice[i] == true veut dire "position i contient une des 4 arêtes de tranche"
-    // ... (voir étape suivante)
+        int c = binomial(i, k);
+
+		if (coord >= c)
+		{
+			coord -= c;
+			isSlice[i] = false;
+		}
+		else
+		{
+			isSlice[i] = true;
+			k--;
+		}
+	}
+
 	EdgeId sliceIds[4] = {EdgeId::FL, EdgeId::FR, EdgeId::BL, EdgeId::BR};
-EdgeId nonSliceIds[8] = {EdgeId::UF, EdgeId::UR, EdgeId::UB, EdgeId::UL,
+	EdgeId nonSliceIds[8] = {EdgeId::UF, EdgeId::UR, EdgeId::UB, EdgeId::UL,
                           EdgeId::DF, EdgeId::DR, EdgeId::DB, EdgeId::DL};
-int si = 0, nsi = 0;
 
-for (int i = 0; i < 12; i++)
-{
-    if (isSlice[i])
-        _edge_perm[i] = sliceIds[si++];
-    else
-        _edge_perm[i] = nonSliceIds[nsi++];
+	int si = 0;
+	int nsi = 0;
+
+	for (int i = 0; i < 12; i++)
+	{
+		if (isSlice[i])
+			_edge_perm[i] = sliceIds[si++];
+		else
+			_edge_perm[i] = nonSliceIds[nsi++];
+	}
 }
+
+int Cube::slicePermCoord() const
+{
+    EdgeId slice[4];
+    int count = 0;
+
+    for (int i = 0; i < 12; ++i)
+    {
+        if (isSliceEdge(_edge_perm[i]))
+            slice[count++] = _edge_perm[i];
+    }
+
+    int coord = 0;
+
+    for (int i = 0; i < 3; ++i)
+    {
+        int smaller = 0;
+
+        for (int j = i + 1; j < 4; ++j)
+        {
+            if (static_cast<int>(slice[j]) <
+                static_cast<int>(slice[i]))
+                ++smaller;
+        }
+
+        coord = coord * (4 - i) + smaller;
+    }
+
+    return coord;
+}
+
+void Cube::setFromSlicePerm(int coord)
+{
+    EdgeId available[4] = {
+        EdgeId::FL,
+        EdgeId::FR,
+        EdgeId::BL,
+        EdgeId::BR
+    };
+
+    EdgeId slice[4];
+
+    for (int i = 0; i < 4; ++i)
+    {
+        int factorial = 1;
+
+        for (int j = 2; j <= 3 - i; ++j)
+            factorial *= j;
+
+        int index = coord / factorial;
+        coord %= factorial;
+
+        slice[i] = available[index];
+
+        for (int j = index; j < 3 - i; ++j)
+            available[j] = available[j + 1];
+    }
+
+    // Pour l'instant on remet les slice edges
+    // dans les 4 positions slice.
+    int s = 0;
+
+    for (int i = 0; i < 12; ++i)
+    {
+        if (isSliceEdge(_edge_perm[i]))
+            _edge_perm[i] = slice[s++];
+    }
 }
 
 // Helpers
@@ -161,7 +323,6 @@ void Cube::print() const
 	for (auto i = 0; i < 12; i++)
 		std::cout << edges[i] << " == " << edges[toIndex(_edge_perm[i])]
 			<< ", o = " << static_cast<int>(_edge_orient[toIndex(static_cast<EdgePos>(i))]) << std::endl;
-
 	// Corners
 	const char corners[][4] = {
 		"UFL", "UFR", "UBR", "UBL",
@@ -171,7 +332,13 @@ void Cube::print() const
 	for (auto i = 0; i < 8; i++)
 		std::cout << corners[i] << " == " << corners[toIndex(_corner_perm[i])]
 			<< ", o = " << static_cast<int>(_corner_orient[toIndex(static_cast<CornerPos>(i))]) << std::endl;
-	std::cout << std::endl;
+	std::cout << "===== Coord =====" << std::endl;
+	std::cout << "EdgeOrient = " << edgeOrientCoord() << std::endl;
+	std::cout << "EdgePerm = " << edgePermCoord() << std::endl;
+	std::cout << "CornerOrient = " << cornerOrientCoord() << std::endl;
+	std::cout << "CornerPerm = " << cornerPermCoord() << std::endl;
+	std::cout << "Slice = " << sliceCoord() << std::endl;
+	std::cout << "SlicePerm = " << slicePermCoord() << std::endl; 
 }
 
 void Cube::reset()

@@ -11,6 +11,7 @@ Application::Application(int argc, char *argv[]) :
 		_scene->cube().move(m);
 		_solver.move(m);
 	}
+	_solver.cube().print();
 }
 		
 

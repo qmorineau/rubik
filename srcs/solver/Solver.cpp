@@ -6,7 +6,8 @@ Solver::~Solver() = default;
 
 std::vector<Move> Solver::solve()
 {
-	return _kociamba.solve(_cube);
+	_kociemba.solve(_cube);
+	return
 }
 
 void Solver::move(Move m)
