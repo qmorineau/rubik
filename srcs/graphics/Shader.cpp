@@ -47,7 +47,7 @@ std::string Shader::readShaderFile(const char* file)
 
 unsigned int Shader::createShader(const char** shaderCode, Shader::Type type)
 {
-	unsigned int shaderId;
+	unsigned int shaderId = 0;
 
 	switch (type)
 	{

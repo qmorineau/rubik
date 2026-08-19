@@ -102,7 +102,7 @@ int RubikCube::getCenterIdx(Face f) const
 	}
 }
 
-void RubikCube::move(Move move)
+void RubikCube::move(Move move, bool print)
 {
 	const std::vector<std::string> moves = {
 		"U ", "U'", "U2",
@@ -116,7 +116,8 @@ void RubikCube::move(Move move)
     if (it == _moves.end())
         throw std::runtime_error("Rubik: RubikCube::move(): move not manage");
     (this->*(it->second))();
-	std::cout << "  " << moves[toIndex(it->first)];
+	if (print)
+		std::cout << "  " << moves[toIndex(it->first)];
 }
 
 void RubikCube::applyMove(Face f, int angle)

@@ -319,7 +319,7 @@ void Cube::print() const
 		"DF", "DR", "DB", "DL",
 		"FL", "FR", "BL", "BR"
 	};
-	std::cout << "===== Edges =====" << std::endl;
+	std::cout << std::endl << "===== Edges =====" << std::endl;
 	for (auto i = 0; i < 12; i++)
 		std::cout << edges[i] << " == " << edges[toIndex(_edge_perm[i])]
 			<< ", o = " << static_cast<int>(_edge_orient[toIndex(static_cast<EdgePos>(i))]) << std::endl;
@@ -338,7 +338,8 @@ void Cube::print() const
 	std::cout << "CornerOrient = " << cornerOrientCoord() << std::endl;
 	std::cout << "CornerPerm = " << cornerPermCoord() << std::endl;
 	std::cout << "Slice = " << sliceCoord() << std::endl;
-	std::cout << "SlicePerm = " << slicePermCoord() << std::endl; 
+	std::cout << "SlicePerm = " << slicePermCoord() << std::endl;
+	std::cout << "=================" << std::endl << std::endl;
 }
 
 void Cube::reset()

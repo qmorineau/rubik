@@ -8,7 +8,7 @@ Application::Application(int argc, char *argv[]) :
 	_scene = new Scene();
 	for (auto m : moves)
 	{
-		_scene->cube().move(m);
+		_scene->cube().move(m, false);
 		_solver.move(m);
 	}
 	_solver.cube().print();

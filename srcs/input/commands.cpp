@@ -21,11 +21,10 @@ void Commands::SolveCube::execute(Application* app) const
 	std::cout << "Solving moves:";
 	for (auto m : solution)
 	{
-		app->scene()->cube().move(m);
+		app->scene()->cube().move(m, true);
 		app->solver().cube().move(m);
 	}
 	std::cout << std::endl;
-	app->solver().cube().print();
 	std::cout << "MOVES NBR = " << solution.size() << std::endl;
 }
 void Commands::ScrambleCube::execute(Application* app) const
@@ -49,7 +48,7 @@ void Commands::ScrambleCube::execute(Application* app) const
 		lastAxis = randomNum / 6;
 		Move m = static_cast<Move>(randomNum);
 
-		app->scene()->cube().move(m);
+		app->scene()->cube().move(m, true);
 		app->solver().move(m);
 	}
 	std::cout << std::endl;

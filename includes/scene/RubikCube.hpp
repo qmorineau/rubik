@@ -37,7 +37,7 @@ class RubikCube
 		void	update(float delta);
 		void	draw();
 		void	reset();
-		void	move(Move move);
+		void	move(Move move, bool print);
 		void	applyMove(Face f, int rot);
 
 		// getter
