@@ -34,7 +34,7 @@ class InputContext
 		const vec2& mousePos()			{return _mousePos;};
 		const auto& activeKeys()		{return _activeKeys;};
 	private:
-		int					_mods;
+		int					_mods = 0;
 		bool				_isMouseCaptured = true;
 		std::bitset<1024>	_keys;
 		std::vector<int>	_activeKeys;

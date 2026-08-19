@@ -5,7 +5,8 @@ Window::Window(Application* app)
 {
 	// glfw: initialize and configure
     // ------------------------------
-    glfwInit();
+	if (!glfwInit())
+    	throw GLWF_WindowError();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -19,7 +20,10 @@ Window::Window(Application* app)
     // --------------------
     _window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Rubik", NULL, NULL);
     if (_window == NULL)
+	{
+		glfwTerminate();
 		throw GLWF_WindowError();
+	}
 
 	glfwMakeContextCurrent(_window);
 	glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -35,7 +39,12 @@ Window::Window(Application* app)
     // glad: load all OpenGL function pointers
     // ---------------------------------------
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+	{
+		glfwDestroyWindow(_window);
+	    _window = nullptr;
+	    glfwTerminate();
 		throw GLAD_Error();
+	}
 
     // configure global opengl state
     // -----------------------------

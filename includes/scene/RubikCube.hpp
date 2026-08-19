@@ -75,7 +75,7 @@ class RubikCube
 		int						_animAngle;
 		std::array<int, 4>		_animEdges;
 		std::array<int, 4>		_animCorners;
-		int						_animCenter;
+		int						_animCenter = -1;
 		std::array<mat4, 4>		_startEdgeOrient;
 		std::array<mat4, 4>		_startCornerOrient;
 		
