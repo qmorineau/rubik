@@ -1,7 +1,6 @@
 #include "Solver.hpp"
 
 Solver::Solver() = default;
-
 Solver::~Solver() = default;
 
 std::vector<Move> Solver::solve()

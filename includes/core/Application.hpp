@@ -32,7 +32,7 @@ class Application
 		Camera&			getCamera() 		{return _scene->camera();};
 		Renderer&		renderer() 			{return _renderer;};
 		Scene*			scene() 			{return _scene;};
-		Solver&			solver() 			{return _solver;};
+		Solver*			solver() 			{return _solver;};
 		InputManager&	inputManager()		{return _inputManager;};
 		InputHandler&	inputHandler()		{return _inputHandler;};
 		InputContext&	inputContext()		{return _inputContext;};
@@ -43,9 +43,9 @@ class Application
 		InputManager		_inputManager;
 		InputHandler		_inputHandler;
 		InputContext		_inputContext;
-		Scene*				_scene;
+		Scene*				_scene = nullptr;
 		Renderer			_renderer;
-		Solver				_solver;
+		Solver*				_solver = nullptr;
 		float				_deltaTime = 0.0f;
 		float				_lastFrame = 0.0f;
 		bool				_debug = 0;

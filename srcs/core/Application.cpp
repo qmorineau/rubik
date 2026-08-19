@@ -6,12 +6,12 @@ Application::Application(int argc, char *argv[]) :
 {
 	auto moves = _parser.parse(argc, argv);
 	_scene = new Scene();
+	_solver = new Solver();
 	for (auto m : moves)
 	{
 		_scene->cube().move(m, false);
-		_solver.move(m);
+		_solver->move(m);
 	}
-	_solver.cube().print();
 }
 		
 
@@ -19,6 +19,8 @@ Application::~Application()
 {
 	if (_scene)
 		delete _scene;
+	if (_solver)
+		delete _solver;
 }
 
 void Application::run()

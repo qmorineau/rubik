@@ -41,7 +41,7 @@ std::vector<Move> Parser::parse(int argc, char *argv[])
 	{
 		auto it = moves.find(token);
 		if (it == moves.end())
-			throw std::runtime_error("Rubik: Unknown move : " + token);
+			throw std::runtime_error("Rubik: Unknown move: " + token);
 		list.push_back(it->second);
 	}
 	return (list);

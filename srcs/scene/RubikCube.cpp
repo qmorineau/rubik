@@ -22,6 +22,10 @@ RubikCube::RubikCube() : _meshGPU(_mesh)
 	_moves.emplace(Move::R2, &RubikCube::R2);
 
 	_globalRot = mat4::rotateX(math::radians(-30)).mul_mat(mat4::rotateY(math::radians(30)));
+
+	_animEdges.fill(0);
+	_animCorners.fill(0);
+
 	reset();
 }
 
