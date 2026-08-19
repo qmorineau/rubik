@@ -35,8 +35,8 @@ class Kociemba
 		std::array<std::array<int, 10>, 40320>	_cornersPermTable;
 		std::array<std::array<int, 10>, 24> 	_slicePermTable;
 
-		bool phase1Search(int edgeCoord, int cornerCoord, int sliceCoord, std::vector<Move>& solution, int depth, Move lastMove);
-		bool phase2Search(int edgeCoord, int cornerCoord, int sliceCoord, std::vector<Move>& solution, int depth, Move lastMove);
+		bool phase1Search(int edgeCoord, int cornerCoord, int sliceCoord, std::vector<Move>& solution, int depth, Move lastMove, int bound);
+		bool phase2Search(int edgeCoord, int cornerCoord, int sliceCoord, std::vector<Move>& solution, int depth, Move lastMove, int bound);
 		void initTable();
 		void initMoves();
 		void createEdgesOrientTable();

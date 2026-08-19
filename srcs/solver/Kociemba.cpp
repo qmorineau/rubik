@@ -18,10 +18,24 @@ std::vector<Move> Kociemba::solve(Cube& c)
 	std::vector<Move> solution;
 
 	Cube toSolve = c;
-	phase1Search(toSolve.edgeOrientCoord(), toSolve.cornerOrientCoord(), toSolve.sliceCoord(), solution, 0, Move::COUNT);
+	for (int bound = 0; bound <= 12; bound++)
+	{
+		if (phase1Search(toSolve.edgeOrientCoord(),
+			toSolve.cornerOrientCoord(),
+			toSolve.sliceCoord(),
+			solution, 0, Move::COUNT, bound))
+				break;
+	}
 	for (auto m : solution)
 		toSolve.move(m);
-	phase2Search(toSolve.edgePermCoord(), toSolve.cornerPermCoord(), toSolve.slicePermCoord(), solution, 0, Move::COUNT);
+	for (int bound = 0; bound <= 18; bound++)
+	{
+		if (phase2Search(toSolve.edgePermCoord(),
+			toSolve.cornerPermCoord(),
+			toSolve.slicePermCoord(),
+			solution, 0, Move::COUNT, bound))
+				break;
+	}
 	return (solution);
 };
 
@@ -250,12 +264,12 @@ void Kociemba::createSlicePermTable()
 	}
 }
 
-bool Kociemba::phase1Search(int edgeCoord, int cornerCoord, int sliceCoord, std::vector<Move>& solution, int depth, Move lastMove)
+bool Kociemba::phase1Search(int edgeCoord, int cornerCoord, int sliceCoord, std::vector<Move>& solution, int depth, Move lastMove, int bound)
 {
 	int heuristic = std::max(_edgesOrientPruning[edgeCoord], _cornersOrientPruning[cornerCoord]);
 	heuristic = std::max(heuristic, _slicePruning[sliceCoord]);
 
-	if (depth + heuristic > 30)
+	if (depth + heuristic > bound)
 		return (false);
 	if (heuristic == 0)
 		return (true);
@@ -268,19 +282,19 @@ bool Kociemba::phase1Search(int edgeCoord, int cornerCoord, int sliceCoord, std:
 		int newCornerCoord = _cornersOrientTable[cornerCoord][i];
 		int newSliceCoord = _sliceTable[sliceCoord][i];
 		solution.push_back(_allMoves[i]);
-		if (phase1Search(newEdgeCoord, newCornerCoord, newSliceCoord, solution, depth + 1, _allMoves[i]))
+		if (phase1Search(newEdgeCoord, newCornerCoord, newSliceCoord, solution, depth + 1, _allMoves[i], bound))
 			return (true);
 		solution.pop_back();
 	}
 	return (false);
 };
 
-bool Kociemba::phase2Search(int edgeCoord, int cornerCoord, int sliceCoord, std::vector<Move>& solution, int depth, Move lastMove)
+bool Kociemba::phase2Search(int edgeCoord, int cornerCoord, int sliceCoord, std::vector<Move>& solution, int depth, Move lastMove, int bound)
 {
 	int heuristic = std::max(_edgesPermPruning[edgeCoord], _cornersPermPruning[cornerCoord]);
 	heuristic = std::max(heuristic, _slicePermPruning[sliceCoord]);
 
-	if (depth + heuristic > 18)
+	if (depth + heuristic > bound)
 		return (false);
 	if (heuristic == 0)
 		return (true);
@@ -295,7 +309,7 @@ bool Kociemba::phase2Search(int edgeCoord, int cornerCoord, int sliceCoord, std:
 		int newCornerCoord = _cornersPermTable[cornerCoord][i];
 		int newSliceCoord = _slicePermTable[sliceCoord][i];
 		solution.push_back(m);
-		if (phase2Search(newEdgeCoord, newCornerCoord, newSliceCoord, solution, depth + 1, m))
+		if (phase2Search(newEdgeCoord, newCornerCoord, newSliceCoord, solution, depth + 1, m, bound))
 			return (true);
 		solution.pop_back();
 	}
