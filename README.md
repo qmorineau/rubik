@@ -31,3 +31,15 @@
 - **Esc**: Quit
 - **TAB**: Uncapture the mouse
 - **Left Click**: Capture the mouse
+
+## Compiling
+
+Rubik uses **C++17**, **OpenGL**, **GLFW**, and **GLAD**.
+
+### Requirements
+
+- C++17 compiler
+- CMake
+- OpenGL 4.3+
+- GLFW (included as git submodule, built automatically)
+- GLAD (included)
