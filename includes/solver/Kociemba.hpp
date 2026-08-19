@@ -25,7 +25,7 @@ class Kociemba
 		std::array<int, 2187>	_cornersOrientPruning;	// 2187 = 3^7  => 8th corners depend of the 7 others
 		std::array<int, 495>	_slicePruning;			// 495 = (12! / (4! * 8!)) => (12! / 8!) / 4! => (12 * 11 * 10 * 9) / (4 * 3 * 2 * 1)
 		std::array<int, 40320>	_edgesPermPruning;		// 8 edges / corners to permut => 40320
-		std::array<int, 40320>	_cornersPermPruning;	// 40320 = 8! = 8 * 7 * 18 * 5 * 4 * 3 * 2 * 1
+		std::array<int, 40320>	_cornersPermPruning;	// 40320 = 8! = 8 * 7 * 6 * 5 * 4 * 3 * 2 * 1
 		std::array<int, 24> 	_slicePermPruning;		// 24 = 4! = 4 * 3 * 2 * 1
 		// Pruning Table
 		std::array<std::array<int, 18>, 2048>	_edgesOrientTable;
