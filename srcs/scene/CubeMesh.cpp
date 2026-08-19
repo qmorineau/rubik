@@ -34,16 +34,39 @@ CubeMesh::CubeMesh()
 	const vec3 color[6] = {
 		vec3(0.8, 0.8, 0.8),
 		vec3(0, 0.8, 0),
-		vec3(0.7, 0.3, 0),
+		vec3(0.95, 0.33, 0.08),
 		vec3(0, 0, 0.8),
 		vec3(0.8, 0, 0),
 		vec3(0.8, 0.8, 0),
 	};
 
-	float size = 0.95f;
+	const vec3 offset[6] = {
+		vec3(0, 0.06, 0),
+		vec3(-0.06, 0, 0),
+		vec3(0, 0, -0.06),
+		vec3(0.06, 0, 0),
+		vec3(0, 0, 0.06),
+		vec3(0, -0.06, 0)
+	};
+
+	float size = 1.f;
 	for (int i = 0; i < 6; i++)
 	{
-		vec3 face[4] = {v[index[i][0]] * size, v[index[i][1]] * size, v[index[i][2]] * size, v[index[i][3]] * size};
+		vec3 face[4] = {v[index[i][0]] * size,
+			v[index[i][1]] * size,
+			v[index[i][2]] * size,
+			v[index[i][3]] * size
+		};
+		addFace(face, normale[i], vec3(0, 0, 0));
+	}
+	size = 0.9;
+	for (int i = 0; i < 6; i++)
+	{
+		vec3 face[4] = {v[index[i][0]] * size + offset[i],
+			v[index[i][1]] * size + offset[i],
+			v[index[i][2]] * size + offset[i],
+			v[index[i][3]] * size + offset[i]
+		};
 		addFace(face, normale[i], color[i]);
 	}
 }
