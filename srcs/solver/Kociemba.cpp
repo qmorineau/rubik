@@ -303,7 +303,7 @@ bool Kociemba::phase2Search(int edgeCoord, int cornerCoord, int sliceCoord, std:
 	{
 		Move m = _movesP2[i];
 		int moveIndex = toIndex(m);
-		if (toIndex(lastMove) / 3 == moveIndex / 3)
+		if (toIndex(lastMove) / 6 == moveIndex / 6)
 			continue;
 		int newEdgeCoord = _edgesPermTable[edgeCoord][i];
 		int newCornerCoord = _cornersPermTable[cornerCoord][i];

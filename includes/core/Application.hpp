@@ -48,7 +48,7 @@ class Application
 		Solver				_solver;
 		float				_deltaTime = 0.0f;
 		float				_lastFrame = 0.0f;
-		bool				_debug = 1;
+		bool				_debug = 0;
 
 		void 		renderLoop();
 		void 		endFrame();

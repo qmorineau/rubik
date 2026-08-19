@@ -32,7 +32,7 @@ void Commands::ScrambleCube::execute(Application* app) const
 {
 	static bool seeded = 0;
 	size_t length = 30;
-	int randomNum = -3;
+	int randomNum = -6;
 	int	lastAxis = -1;
 
 	if (!seeded)
@@ -44,9 +44,9 @@ void Commands::ScrambleCube::execute(Application* app) const
 	std::cout << "Scramble "<< length << " moves:";
 	for (size_t i = 0; i < length; i++)
 	{
-		while (randomNum / 3 == lastAxis)
+		while (randomNum / 6 == lastAxis)
 			randomNum = rand() % static_cast<int>(Move::COUNT);
-		lastAxis = randomNum / 3;
+		lastAxis = randomNum / 6;
 		Move m = static_cast<Move>(randomNum);
 
 		app->scene()->cube().move(m);
