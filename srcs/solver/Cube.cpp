@@ -59,6 +59,7 @@ void Cube::setFromEdgesOrient(int coord)
 	_edge_orient[11] = sum % 2; // 12th edges depend of the 11 others
 }
 
+// Lehmer Code
 int Cube::edgePermCoord() const
 {
 	int coord = 0;
@@ -79,10 +80,10 @@ int Cube::edgePermCoord() const
 
 void Cube::setFromEdgesPerm(int coord)
 {
-		EdgeId available[8] = {
-        EdgeId::UF, EdgeId::UR, EdgeId::UB, EdgeId::UL,
-        EdgeId::DF, EdgeId::DR, EdgeId::DB, EdgeId::DL
-    };
+	EdgeId available[8] = {
+		EdgeId::UF, EdgeId::UR, EdgeId::UB, EdgeId::UL,
+		EdgeId::DF, EdgeId::DR, EdgeId::DB, EdgeId::DL
+	};
 
     for (int i = 0; i < 8; ++i)
     {
@@ -124,6 +125,7 @@ void Cube::setFromCornersOrient(int coord)
 	_corner_orient[7] = (3 - (sum % 3)) % 3; // 8th corners depend of the 7 others
 }
 
+// Lehmer Code
 int Cube::cornerPermCoord() const
 {
 	int coord = 0;
@@ -145,9 +147,9 @@ int Cube::cornerPermCoord() const
 void Cube::setFromCornersPerm(int coord)
 {
 	CornerId available[8] = {
-        CornerId::UFL, CornerId::UFR, CornerId::UBR, CornerId::UBL,
-        CornerId::DFL, CornerId::DFR, CornerId::DBR, CornerId::DBL
-    };
+		CornerId::UFL, CornerId::UFR, CornerId::UBR, CornerId::UBL,
+		CornerId::DFL, CornerId::DFR, CornerId::DBR, CornerId::DBL
+	};
 
     for (int i = 0; i < 8; ++i)
     {
@@ -203,6 +205,9 @@ int Cube::sliceCoord() const
 
 void Cube::setFromSlice(int coord)
 {
+	EdgeId sliceIds[4] = {EdgeId::FL, EdgeId::FR, EdgeId::BL, EdgeId::BR};
+	EdgeId nonSliceIds[8] = {EdgeId::UF, EdgeId::UR, EdgeId::UB, EdgeId::UL,
+							EdgeId::DF, EdgeId::DR, EdgeId::DB, EdgeId::DL};
     int k = 3; // 4 edge slice pos remaining
     bool isSlice[12] = {};
 
@@ -210,9 +215,7 @@ void Cube::setFromSlice(int coord)
     {
 		if (k < 0)
 			break;
-
         int c = binomial(i, k);
-
 		if (coord >= c)
 		{
 			coord -= c;
@@ -225,13 +228,8 @@ void Cube::setFromSlice(int coord)
 		}
 	}
 
-	EdgeId sliceIds[4] = {EdgeId::FL, EdgeId::FR, EdgeId::BL, EdgeId::BR};
-	EdgeId nonSliceIds[8] = {EdgeId::UF, EdgeId::UR, EdgeId::UB, EdgeId::UL,
-                          EdgeId::DF, EdgeId::DR, EdgeId::DB, EdgeId::DL};
-
 	int si = 0;
 	int nsi = 0;
-
 	for (int i = 0; i < 12; i++)
 	{
 		if (isSlice[i])
@@ -241,45 +239,35 @@ void Cube::setFromSlice(int coord)
 	}
 }
 
+// Lehmer Code
 int Cube::slicePermCoord() const
 {
-    EdgeId slice[4];
-    int count = 0;
+	EdgeId slice[4];
+	int count = 0;
 
-    for (int i = 0; i < 12; ++i)
-    {
-        if (isSliceEdge(_edge_perm[i]))
-            slice[count++] = _edge_perm[i];
-    }
+	for (int i = 0; i < 12; ++i)
+	{
+		if (isSliceEdge(_edge_perm[i]))
+			slice[count++] = _edge_perm[i];
+	}
 
-    int coord = 0;
-
-    for (int i = 0; i < 3; ++i)
-    {
-        int smaller = 0;
-
-        for (int j = i + 1; j < 4; ++j)
-        {
-            if (static_cast<int>(slice[j]) <
-                static_cast<int>(slice[i]))
-                ++smaller;
-        }
-
-        coord = coord * (4 - i) + smaller;
-    }
-
-    return coord;
+	int coord = 0;
+	for (int i = 0; i < 3; ++i)
+	{
+		int smaller = 0;
+		for (int j = i + 1; j < 4; ++j)
+		{
+			if (static_cast<int>(slice[j]) < static_cast<int>(slice[i]))
+				++smaller;
+		}
+		coord = coord * (4 - i) + smaller;
+	}
+	return coord;
 }
 
 void Cube::setFromSlicePerm(int coord)
 {
-    EdgeId available[4] = {
-        EdgeId::FL,
-        EdgeId::FR,
-        EdgeId::BL,
-        EdgeId::BR
-    };
-
+    EdgeId available[4] = {EdgeId::FL, EdgeId::FR, EdgeId::BL, EdgeId::BR};
     EdgeId slice[4];
 
     for (int i = 0; i < 4; ++i)
@@ -298,10 +286,7 @@ void Cube::setFromSlicePerm(int coord)
             available[j] = available[j + 1];
     }
 
-    // Pour l'instant on remet les slice edges
-    // dans les 4 positions slice.
     int s = 0;
-
     for (int i = 0; i < 12; ++i)
     {
         if (isSliceEdge(_edge_perm[i]))
