@@ -5,6 +5,12 @@ The solver uses Kociemba's two-phase algorithm.
 
 ![Demo](assets/demo.gif)
 
+## Performance:
+
+- Average solution length: 23.613 moves
+- Average solve time: 66.8 ms
+- Measured over 1000 random 30-moves scrambles
+
 ## Controls
 
 ### Camera
