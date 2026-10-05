@@ -1,36 +1,30 @@
-## Keybinding
+# Rubik
+
+A 3D Rubik's Cube simulator and solver written in C++17 with OpenGL.
+The solver uses Kociemba's two-phase algorithm.
+
+![Demo](assets/demo.gif)
+
+## Controls
 
 ### Camera
-- **Mouse Scroll**: Zoom In/Out
-- **W**: Move Up
-- **S**: Move Down
-- **A**: Move Left
-- **D**: Move Right
+- **Mouse Scroll**: Zoom in/out
+- **W / A / S / D**: Move up / left / down / right
 - **R**: Reset position
 
 ### Cube
-- **ENTER**: Scramble the cube
-- **SPACE**: Solve the cube
-- **1**: Reset the cube
+- **ENTER**: Scramble
+- **SPACE**: Solve
+- **1**: Reset
 
-- **UP**: "U" Move (Up Face 90°)
-- **DOWN**: "D" Move (Down Face 90°)
-- **LEFT**: "L" Move (Left Face 90°)
-- **RIGHT**: "R" Move (Right Face 90°)
-- **FRONT**: "F" Move (Front Face 90°)
-- **BACK**: "B" Move (Back Face 90°)
-
-- **CTRL + UP**: "U Prime" Move (Up Face -90°)
-- **CTRL + DOWN**: "D Prime" Move (Down Face -90°)
-- **CTRL + LEFT**: "L Prime" Move (Left Face -90°)
-- **CTRL + RIGHT**: "R Prime" Move (Right Face -90°)
-- **CTRL + FRONT**: "F Prime" Move (Front Face -90°)
-- **CTRL + BACK**: "B Prime" Move (Back Face -90°)
+### Face moves
+- **UP / DOWN / LEFT / RIGHT / FRONT / BACK**: U, D, L, R, F, B (90°)
+- **CTRL + key**: Prime move (-90°)
 
 ### Misc
-- **Esc**: Quit
-- **TAB**: Uncapture the mouse
 - **Left Click**: Capture the mouse
+- **TAB**: Release the mouse
+- **Esc**: Quit
 
 ## Compiling
 
